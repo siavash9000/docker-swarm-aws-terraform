@@ -16,9 +16,10 @@ fi
 : ${AWS_SECRET_ACCESS_KEY:?"Need to set AWS_SECRET_ACCESS_KEY"}
 : ${AWS_DEFAULT_REGION:?"Need to set AWS_DEFAULT_REGION"}
 
-TERRAFORM="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -v $PWD:/terraform -i -t hashicorp/terraform:light"
+TERRAFORM="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -v $PWD:/terraform -i -t -w /terraform/ hashicorp/terraform:light"
 
-$TERRAFORM apply -state=/terraform/terraform.tfstate /terraform
+$TERRAFORM init
+$TERRAFORM apply -state=/terraform/terraform.tfstate
 
 AWS_VPC_ID=$($TERRAFORM output -state=/terraform/terraform.tfstate vpc_id | tr -d '\r')
 AWS_SUBNET_ID=$($TERRAFORM output -state=/terraform/terraform.tfstate vpc_subnet_a | tr -d '\r')
