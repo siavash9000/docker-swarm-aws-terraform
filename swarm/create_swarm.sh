@@ -23,7 +23,7 @@ fi
 : ${AWS_SSH_KEY_ID:?"Need to set AWS_SSH_KEY_ID"}
 : ${AWS_SSH_KEY:?"Need to set AWS_SSH_KEY"}
 
-cp ${AWS_SSH_KEY} .
+cp -n ${AWS_SSH_KEY} .
 AWS_SSH_KEY=/terraform/`basename ${AWS_SSH_KEY}`
 
 AWS="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $(tty &>/dev/null && echo "-i") mesosphere/aws-cli"
@@ -32,6 +32,7 @@ DOCKER_AMI=$($AWS ec2 describe-images --owners self --filters "Name=name,Values=
 
 TERRAFORM="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -v $PWD:/terraform -i -t hashicorp/terraform:light"
 
+$TERRAFORM init
 $TERRAFORM $1 -var aws_region=${AWS_DEFAULT_REGION} \
               -var 'amis={ "'${AWS_DEFAULT_REGION}'" = "'${DOCKER_AMI}'" }' \
               -var ssh_key_name=${AWS_SSH_KEY_ID} \
