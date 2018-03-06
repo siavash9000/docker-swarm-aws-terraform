@@ -19,15 +19,15 @@ fi
 TERRAFORM="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -v $PWD:/terraform -i -t -w /terraform/ hashicorp/terraform:light"
 
 $TERRAFORM init
-$TERRAFORM apply -state=/terraform/terraform.tfstate
+$TERRAFORM apply -state=/terraform/terraform.tfstate -auto-approve
 
 AWS_VPC_ID=$($TERRAFORM output -state=/terraform/terraform.tfstate vpc_id | tr -d '\r')
 AWS_SUBNET_ID=$($TERRAFORM output -state=/terraform/terraform.tfstate vpc_subnet_a | tr -d '\r')
 AWS_SECURITY_GROUP_ID=$($TERRAFORM output -state=/terraform/terraform.tfstate security_group_id | tr -d '\r')
 
-PACKER="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -e AWS_VPC_ID=$AWS_VPC_ID -e AWS_SUBNET_ID=$AWS_SUBNET_ID -e AWS_SECURITY_GROUP_ID=$AWS_SECURITY_GROUP_ID -v $PWD:/packer -i -t hashicorp/packer:light"
+PACKER="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -e AWS_VPC_ID=$AWS_VPC_ID -e AWS_SUBNET_ID=$AWS_SUBNET_ID -e AWS_SECURITY_GROUP_ID=$AWS_SECURITY_GROUP_ID -v $PWD:/packer -w packer -i -t hashicorp/packer:light"
 
 $PACKER build -var 'pwd=/packer' /packer/docker-aws.json
 
-$TERRAFORM destroy -force -state=/terraform/terraform.tfstate /terraform
+$TERRAFORM destroy -force -state=/terraform/terraform.tfstate -auto-approve
 
