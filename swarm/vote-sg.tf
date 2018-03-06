@@ -1,6 +1,6 @@
 resource "aws_security_group" "vote" {
-  name        = "${var.vpc_key}-sg-vote"
-  description = "Security group for vote app"
+  name        = "${var.vpc_key}-sg-dockerswarm"
+  description = "Security group for docker swarm"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress {
@@ -22,7 +22,7 @@ resource "aws_security_group" "vote" {
   }
 
   tags {
-    Name = "${var.vpc_key}-sg-vote"
+    Name = "${var.vpc_key}-sg-dockerswarm"
     VPC = "${var.vpc_key}"
     Terraform = "Terraform"
   }

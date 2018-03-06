@@ -29,5 +29,4 @@ PACKER="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_AC
 
 $PACKER build -var 'pwd=/packer' /packer/docker-aws.json
 
-$TERRAFORM destroy -force -state=/terraform/terraform.tfstate -auto-approve
-
+$TERRAFORM destroy -force -state=/terraform/terraform.tfstate
