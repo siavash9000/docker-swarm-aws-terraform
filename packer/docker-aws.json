@@ -11,7 +11,7 @@
       "ami_name": "docker {{isotime \"2006-01-02-030405\"}}",
       "ami_virtualization_type": "hvm",
       "associate_public_ip_address": "true",
-      "instance_type": "t2.small",
+      "instance_type": "t2.nano",
       "region": "{{user `aws_default_region`}}",
       "vpc_id": "{{user `aws_vpc_id`}}",
       "subnet_id": "{{user `aws_subnet_id`}}",

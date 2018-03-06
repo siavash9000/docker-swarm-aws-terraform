@@ -25,7 +25,8 @@ fi
 
 cp -n ${AWS_SSH_KEY} .
 AWS_SSH_KEY=/terraform/`basename ${AWS_SSH_KEY}`
-
+echo $AWS_SSH_KEY
+exit 0
 AWS="docker run --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $(tty &>/dev/null && echo "-i") mesosphere/aws-cli"
 
 DOCKER_AMI=$($AWS ec2 describe-images --owners self --filters "Name=name,Values=docker*" --query 'Images[*].[ImageId,Name,CreationDate]' --output text | sort -k 4 -r | head -1 | awk '{print $1'})

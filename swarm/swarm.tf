@@ -1,6 +1,6 @@
 resource "aws_instance" "swarm-manager" {
     ami = "${lookup(var.amis, var.aws_region)}"
-    instance_type = "t2.small"
+    instance_type = "t2.nano"
     count = "${var.cluster_manager_count}"
     associate_public_ip_address = "true"
     key_name = "${var.ssh_key_name}"
@@ -36,7 +36,7 @@ resource "aws_instance" "swarm-manager" {
 
 resource "aws_instance" "swarm-node" {
     ami = "${lookup(var.amis, var.aws_region)}"
-    instance_type = "t2.small"
+    instance_type = "t2.nano"
     count = "${var.cluster_node_count}"
     associate_public_ip_address = "true"
     key_name = "${var.ssh_key_name}"
